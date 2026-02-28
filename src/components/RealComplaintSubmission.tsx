@@ -119,6 +119,7 @@ export function RealComplaintSubmission({
     if (!canSubmit) return;
 
     setSubmissionStage("preparing");
+    window.scrollTo({ top: 0, behavior: "smooth" });
     const startTime = Date.now();
     let logs: LogEntry[] = [];
 
@@ -210,138 +211,193 @@ export function RealComplaintSubmission({
           </p>
         </div>
 
-        {submissionStage === "success" ? (
-          // SUCCESS CARD
-          <div className="p-8">
-            <div className="bg-[#F0FDF4] border border-green-200 border-l-4 border-l-green-500 rounded-lg p-6 mb-8 shadow-sm">
-              <h3 className="text-xl font-bold text-green-800 flex items-center gap-2 mb-6">
-                <CheckCircle2 className="w-7 h-7 text-green-600" />✅ 진정서
-                접수 완료
-              </h3>
+        {/* SUCCESS CARD & PROGRESS AREA */}
+        <div className="p-8">
+          {submissionStage === "success" && (
+            <div className="bg-[#F0FDF4] border border-green-200 border-l-4 border-l-green-500 rounded-lg p-6 mb-8 shadow-sm animate-in fade-in duration-500">
+                <h3 className="text-xl font-bold text-green-800 flex items-center gap-2 mb-6">
+                  <CheckCircle2 className="w-7 h-7 text-green-600" />✅ 진정서
+                  접수 완료
+                </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 text-sm mb-8 bg-white/60 p-5 rounded border border-green-100">
-                <div className="flex justify-between items-center py-2 border-b border-green-100/50">
-                  <span className="text-gray-500 font-medium">접수번호</span>
-                  <span className="font-bold text-gray-800 font-mono text-base">
-                    {referenceNumber}
-                  </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 text-sm mb-8 bg-white/60 p-5 rounded border border-green-100">
+                  <div className="flex justify-between items-center py-2 border-b border-green-100/50">
+                    <span className="text-gray-500 font-medium">접수번호</span>
+                    <span className="font-bold text-gray-800 font-mono text-base">
+                      {referenceNumber}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-green-100/50">
+                    <span className="text-gray-500 font-medium">접수일시</span>
+                    <span className="font-bold text-gray-800">
+                      {new Date().toLocaleString("ko-KR")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-green-100/50">
+                    <span className="text-gray-500 font-medium">접수관서</span>
+                    <span className="font-bold text-gray-800">
+                      {jurisdiction.name}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-green-100/50">
+                    <span className="text-gray-500 font-medium">접수방법</span>
+                    <span className="font-bold text-gray-800">
+                      인터넷팩스 자동 발송
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 md:col-span-2">
+                    <span className="text-gray-500 font-medium">처리기한</span>
+                    <span className="font-bold text-[#1A4B8C]">
+                      접수일로부터 25일 이내 (근로감독관집무규정)
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-green-100/50">
-                  <span className="text-gray-500 font-medium">접수일시</span>
-                  <span className="font-bold text-gray-800">
-                    {new Date().toLocaleString("ko-KR")}
-                  </span>
+
+                <div className="space-y-2 text-green-700 text-sm font-medium">
+                  <p className="flex items-start gap-2">
+                    <span>📌</span>
+                    접수 확인 알림이{" "}
+                    <span className="font-bold border-b border-green-700/30">
+                      {email}
+                    </span>{" "}
+                    주소로 발송되었습니다.
+                  </p>
+                  <p className="flex items-start gap-2">
+                    <span>📌</span>
+                    담당 근로감독관 배정 후 출석 요구가 있을 수 있습니다.
+                  </p>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-green-100/50">
-                  <span className="text-gray-500 font-medium">접수관서</span>
-                  <span className="font-bold text-gray-800">
-                    {jurisdiction.name}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-green-100/50">
-                  <span className="text-gray-500 font-medium">접수방법</span>
-                  <span className="font-bold text-gray-800">
-                    인터넷팩스 자동 발송
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 md:col-span-2">
-                  <span className="text-gray-500 font-medium">처리기한</span>
-                  <span className="font-bold text-[#1A4B8C]">
-                    접수일로부터 25일 이내 (근로감독관집무규정)
-                  </span>
+
+                <div className="flex gap-4 mt-8 flex-wrap">
+                  <button
+                    onClick={() => window.print()}
+                    className="flex-1 min-w-[200px] bg-white text-green-700 border border-green-300 hover:bg-green-50 font-bold py-3 px-6 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Printer className="w-5 h-5" />
+                    접수 확인서 다운로드
+                  </button>
+                  <button
+                    onClick={() =>
+                      window.open(
+                        "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
+                        "_blank",
+                      )
+                    }
+                    className="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
+                  >
+                    🌐 노동포털에서 공식 접수하기
+                  </button>
+                  <button
+                    onClick={onNext}
+                    className="flex-1 min-w-[200px] bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
+                  >
+                    다음 단계 안내 보기 →
+                  </button>
                 </div>
               </div>
+            )}
 
-              <div className="space-y-2 text-green-700 text-sm font-medium">
-                <p className="flex items-start gap-2">
-                  <span>📌</span>
-                  접수 확인 알림이{" "}
-                  <span className="font-bold border-b border-green-700/30">
-                    {email}
-                  </span>{" "}
-                  주소로 발송되었습니다.
-                </p>
-                <p className="flex items-start gap-2">
-                  <span>📌</span>
-                  담당 근로감독관 배정 후 출석 요구가 있을 수 있습니다.
-                </p>
-              </div>
+            {/* Progress Simulation (Phase 1 & 2) shown both before and during success as a log if needed, or just during */}
+            {submissionStage !== "idle" && (
+              <div className="w-full bg-blue-50 border border-blue-100 rounded-lg p-6 mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-bold whitespace-pre-wrap text-[#1A4B8C]">
+                    {submissionStage === "preparing"
+                      ? "📝 보안 연결 수립 및 제출 서류 패키징 중..."
+                      : submissionStage === "success"
+                        ? "✅ 팩스 전송 완료"
+                        : `📨 ${jurisdiction.name} 으로 서류 암호화 전송 중...`}
+                  </span>
+                  <span className="font-mono text-sm font-bold text-[#1A4B8C]">
+                    {progress}%
+                  </span>
+                </div>
+                <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
 
-              <div className="flex gap-4 mt-8 flex-wrap">
-                <button
-                  onClick={() => window.print()}
-                  className="flex-1 min-w-[200px] bg-white text-green-700 border border-green-300 hover:bg-green-50 font-bold py-3 px-6 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
-                >
-                  <Printer className="w-5 h-5" />
-                  접수 확인서 다운로드
-                </button>
-                <button
-                  onClick={onNext}
-                  className="flex-1 min-w-[200px] bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
-                >
-                  다음 단계 안내 보기 →
-                </button>
-              </div>
-            </div>
-
-            {/* Next Steps preview directly below */}
-            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="bg-navy text-white px-2 py-0.5 rounded text-xs">
-                  안내
-                </span>
-                📋 접수 후 진행 절차
-              </h4>
-              <div className="space-y-4 text-sm text-gray-700">
-                <div className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex flex-col items-center justify-center shrink-0">
-                    1
+                <div className="mt-4 flex flex-col gap-1 text-xs text-gray-500 font-mono animate-pulse">
+                  <div>
+                    {submissionStage === "preparing"
+                      ? "> verifying document integrity"
+                      : submissionStage === "success"
+                        ? "> fax transmission verified"
+                        : "> initiating secure transfer protocol"}
                   </div>
                   <div>
-                    <span className="font-bold block mb-1">
-                      근로감독관 배정 (접수 후 1-2주 이내)
-                    </span>
-                    <span className="text-gray-500">
-                      담당 근로감독관이 배정되면 알림톡/문자로 통보됩니다.
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex flex-col items-center justify-center shrink-0">
-                    2
-                  </div>
-                  <div>
-                    <span className="font-bold block mb-1">
-                      출석 요구 및 사실관계 조사
-                    </span>
-                    <span className="text-gray-500">
-                      진정인과 피진정인에게 출석을 요구하여 조사합니다.
-                      <br />
-                      2회 이상 불출석 시 신고의사 없음으로 간주될 수 있습니다.
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex flex-col items-center justify-center shrink-0">
-                    3
-                  </div>
-                  <div>
-                    <span className="font-bold block mb-1">
-                      시정지시 또는 형사입건
-                    </span>
-                    <span className="text-gray-500">
-                      임금체불 확인 시 사업주에게 시정지시하며 미이행 시
-                      형사입건 후 검찰에 송치됩니다.
-                    </span>
+                    {submissionStage === "preparing"
+                      ? "> compressing evidence files"
+                      : submissionStage === "success"
+                        ? "> transaction ID generated"
+                        : "> Handshake successful. Uploading bytes..."}
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          // PRE-SUBMISSION FORM
-          <div className="p-8 space-y-8">
-            {/* 1. Jurisdiction Auto-Detection Display */}
+            )}
+
+          {/* Next Steps preview directly below */}
+          {submissionStage === "success" && (
+            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 animate-in fade-in duration-500 delay-150 fill-mode-both">
+                <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <span className="bg-navy text-white px-2 py-0.5 rounded text-xs">
+                    안내
+                  </span>
+                  📋 접수 후 진행 절차
+                </h4>
+                <div className="space-y-4 text-sm text-gray-700">
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex flex-col items-center justify-center shrink-0">
+                      1
+                    </div>
+                    <div>
+                      <span className="font-bold block mb-1">
+                        근로감독관 배정 (접수 후 1-2주 이내)
+                      </span>
+                      <span className="text-gray-500">
+                        담당 근로감독관이 배정되면 알림톡/문자로 통보됩니다.
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex flex-col items-center justify-center shrink-0">
+                      2
+                    </div>
+                    <div>
+                      <span className="font-bold block mb-1">
+                        출석 요구 및 사실관계 조사
+                      </span>
+                      <span className="text-gray-500">
+                        진정인과 피진정인에게 출석을 요구하여 조사합니다.
+                        <br />
+                        2회 이상 불출석 시 신고의사 없음으로 간주될 수 있습니다.
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex flex-col items-center justify-center shrink-0">
+                      3
+                    </div>
+                    <div>
+                      <span className="font-bold block mb-1">
+                        시정지시 또는 형사입건
+                      </span>
+                      <span className="text-gray-500">
+                        임금체불 확인 시 사업주에게 시정지시하며 미이행 시
+                        형사입건 후 검찰에 송치됩니다.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+        </div>
+
+        {/* PRE-SUBMISSION FORM (always stays visible) */}
+        <div className="p-8 space-y-8">
+          {/* 1. Jurisdiction Auto-Detection Display */}
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-5">
               <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2 border-b border-gray-200 pb-3">
                 <MapPin className="text-red-500 w-5 h-5" />
@@ -508,14 +564,15 @@ export function RealComplaintSubmission({
               )}
 
               {/* Progress Simulation (Phase 1 & 2) */}
-              {(submissionStage === "preparing" ||
-                submissionStage === "sending") && (
+              {submissionStage !== "idle" && (
                 <div className="w-full bg-blue-50 border border-blue-100 rounded-lg p-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-bold whitespace-pre-wrap text-[#1A4B8C]">
                       {submissionStage === "preparing"
                         ? "📝 보안 연결 수립 및 제출 서류 패키징 중..."
-                        : `📨 ${jurisdiction.name} 으로 서류 암호화 전송 중...`}
+                        : submissionStage === "success"
+                          ? "✅ 팩스 전송 완료"
+                          : `📨 ${jurisdiction.name} 으로 서류 암호화 전송 중...`}
                     </span>
                     <span className="font-mono text-sm font-bold text-[#1A4B8C]">
                       {progress}%
@@ -532,19 +589,22 @@ export function RealComplaintSubmission({
                     <div>
                       {submissionStage === "preparing"
                         ? "> verifying document integrity"
-                        : "> initiating secure transfer protocol"}
+                        : submissionStage === "success"
+                          ? "> fax transmission verified"
+                          : "> initiating secure transfer protocol"}
                     </div>
                     <div>
                       {submissionStage === "preparing"
                         ? "> compressing evidence files"
-                        : "> Handshake successful. Uploading bytes..."}
+                        : submissionStage === "success"
+                          ? "> transaction ID generated"
+                          : "> Handshake successful. Uploading bytes..."}
                     </div>
                   </div>
                 </div>
               )}
             </div>
           </div>
-        )}
       </div>
     </div>
   );

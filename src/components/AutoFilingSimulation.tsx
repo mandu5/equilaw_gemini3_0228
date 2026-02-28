@@ -799,7 +799,14 @@ export function AutoFilingSimulation({
 
         {/* Real Portal Integration Flow */}
         {isFinished && (
-          <div className="mt-12 flex justify-center animate-[fadeIn_0.5s_ease-out_forwards]">
+          <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 animate-[fadeIn_0.5s_ease-out_forwards]">
+            <button
+              onClick={handleFullCopyAndOpenPortal}
+              className="flex items-center justify-center gap-3 bg-white border-2 border-blue-600 text-blue-700 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg transition-colors shadow-sm"
+            >
+              <Send className="w-6 h-6" /> 
+              노동포털 실제 접수 페이지 열기
+            </button>
             <button
               onClick={() => {
                 if (onNext) {
@@ -808,10 +815,9 @@ export function AutoFilingSimulation({
                   console.error("onNext prop is not provided");
                 }
               }}
-              className="flex items-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
+              className="flex items-center justify-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
             >
-              다음 단계로 이동 (실제 접수)
-              <Send className="w-6 h-6" />
+              다음 단계 안내 보기 →
             </button>
           </div>
         )}

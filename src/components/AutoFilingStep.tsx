@@ -18,9 +18,9 @@ export function AutoFilingStep({
   onNext,
 }: AutoFilingStepProps) {
   const [autoFillLogs, setAutoFillLogs] = useState<any[]>([]);
-  const isSimulationComplete =
-    autoFillLogs.length > 0 &&
-    autoFillLogs[autoFillLogs.length - 1].text.includes("🏁");
+  const isSimulationComplete = autoFillLogs.some(
+    (log) => log.text.includes("🏁") || log.text.includes("Form auto-fill complete")
+  );
 
   // Derive workplace address from messages if possible, else empty string
   const workplaceAddress = "서울특별시 영등포구 양평로 21길 26"; // Hardcoded for demo, normally extracted from analysis
@@ -53,16 +53,7 @@ export function AutoFilingStep({
               onComplete={() => {
                 console.log("Auto fill simulation complete");
               }}
-              onNext={() => {
-                const logs = [
-                  {
-                    timeMs: Date.now(),
-                    agentProcess: "Action",
-                    text: `[${((Date.now() - (autoFillLogs[0]?.timeMs || Date.now())) / 1000).toFixed(1)}s] 🏁 Action Agent: Ready for real submission.`,
-                  },
-                ];
-                setAutoFillLogs((prev) => [...prev, ...logs]);
-              }}
+              onNext={onNext}
             />
           </div>
         </div>
