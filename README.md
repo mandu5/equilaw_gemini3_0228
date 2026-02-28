@@ -9,9 +9,8 @@
 ## 🎬 Final Demo Video
 *(Click the video below to watch the demonstration)*
 
-https://github.com/user-attachments/assets/demo.mp4
+https://github.com/user-attachments/assets/f25f8a44-db21-4af7-bd68-0976af482ef9
 
-> **Tip:** Once pushed to your GitHub repository, this video will automatically render as a streaming player. (Currently saved as `demo.mp4` in the root directory).
 
 ---
 
