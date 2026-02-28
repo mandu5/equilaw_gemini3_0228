@@ -225,8 +225,6 @@ export function AutoFilingSimulation({
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Phase 6 Real Portal States
-  const [showGuide, setShowGuide] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -324,33 +322,6 @@ export function AutoFilingSimulation({
     } catch (err) {
       alert("클립보드 복사에 실패했습니다. 권한을 확인해주세요.");
     }
-  };
-
-  const handleFullCopyAndOpenPortal = () => {
-    const fullText = `═══ EquiLaw 자동 생성 진정서 ═══\n서식: ${formType.formTitle} (${formType.formCode})\n관할관서: ${jurisdiction.name}\n생성일시: ${new Date().toLocaleString()}\n\n[진정인 정보]\n성명: ${complainantName}\n연락처: 010-1234-5678\n주소: 서울특별시 강남구 테헤란로 123\n\n[피진정인 정보]\n상호/사업장명: ${respondentName}\n대표자명: 김부장\n사업장 주소: ${companyAddress}\n전화번호: 031-987-6543\n\n[진정내용]\n체불임금 총액: \₩${wageData?.calculatedAmount ? wageData.calculatedAmount.toLocaleString() : "861,244"}\n체불 기간: ${wageData?.periodStart && wageData?.periodEnd ? `${wageData.periodStart} ~ ${wageData.periodEnd}` : "2024.11.01 ~ 2024.12.31"}\n\n[진정 사유]\n${reasonText}\n\n═══════════════════════════════\n이 데이터는 EquiLaw AI가 자동 생성하였습니다.\n노동포털(labor.moel.go.kr)에서 해당 서식에 붙여넣기 하세요.`;
-
-    copyToClipboard(fullText);
-
-    onLogsUpdate([
-      {
-        timeMs: Date.now(),
-        agentProcess: "Action",
-        text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 📋 Action Agent: Filing data copied to clipboard ✓`,
-      },
-      {
-        timeMs: Date.now() + 100,
-        agentProcess: "Action",
-        text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 🌐 Action Agent: Opening 고용노동부 노동포털...`,
-      },
-      {
-        timeMs: Date.now() + 200,
-        agentProcess: "Action",
-        text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 📋 Action Agent: Step-by-step filing guide displayed`,
-      },
-    ]);
-
-    window.open(formType.portalUrl, "_blank");
-    setShowGuide(true);
   };
 
   // Format the violation summary for the "Reason" field
@@ -797,30 +768,7 @@ export function AutoFilingSimulation({
               </div>
             </div>
 
-        {/* Real Portal Integration Flow */}
-        {isFinished && (
-          <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 animate-[fadeIn_0.5s_ease-out_forwards]">
-            <button
-              onClick={handleFullCopyAndOpenPortal}
-              className="flex items-center justify-center gap-3 bg-white border-2 border-blue-600 text-blue-700 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg transition-colors shadow-sm"
-            >
-              <Send className="w-6 h-6" /> 
-              노동포털 실제 접수 페이지 열기
-            </button>
-            <button
-              onClick={() => {
-                if (onNext) {
-                  onNext();
-                } else {
-                  console.error("onNext prop is not provided");
-                }
-              }}
-              className="flex items-center justify-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
-            >
-              다음 단계 안내 보기 →
-            </button>
-          </div>
-        )}
+        {/* End of Section 4 */}
           </div>
         </div>
       </div>
