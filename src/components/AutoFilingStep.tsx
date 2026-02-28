@@ -50,8 +50,19 @@ export function AutoFilingStep({
               violations={violations}
               complaintData={complaintData}
               onLogsUpdate={setAutoFillLogs}
-              onComplete={() => console.log("Auto fill simulation complete")}
-              onNext={onNext}
+              onComplete={() => {
+                console.log("Auto fill simulation complete");
+              }}
+              onNext={() => {
+                const logs = [
+                  {
+                    timeMs: Date.now(),
+                    agentProcess: "Action",
+                    text: `[${((Date.now() - (autoFillLogs[0]?.timeMs || Date.now())) / 1000).toFixed(1)}s] 🏁 Action Agent: Ready for real submission.`,
+                  },
+                ];
+                setAutoFillLogs((prev) => [...prev, ...logs]);
+              }}
             />
           </div>
         </div>

@@ -505,7 +505,7 @@ export function AutoFilingSimulation({
               idx === i ? { ...f, filledValue: currentText } : f,
             ),
           );
-          await new Promise((r) => setTimeout(r, 30)); // 30ms per char typing speed
+          await new Promise((r) => setTimeout(r, 10)); // 10ms per char typing speed (FASTER)
         }
 
         // Mark as filled
@@ -527,7 +527,7 @@ export function AutoFilingSimulation({
         onLogsUpdate([...newLogs]);
 
         // Pause before next field
-        await new Promise((r) => setTimeout(r, 400));
+        await new Promise((r) => setTimeout(r, 200)); // FASTER
       }
 
       // Finish Sequence
@@ -801,7 +801,13 @@ export function AutoFilingSimulation({
         {isFinished && (
           <div className="mt-12 flex justify-center animate-[fadeIn_0.5s_ease-out_forwards]">
             <button
-              onClick={onNext}
+              onClick={() => {
+                if (onNext) {
+                  onNext();
+                } else {
+                  console.error("onNext prop is not provided");
+                }
+              }}
               className="flex items-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
             >
               다음 단계로 이동 (실제 접수)

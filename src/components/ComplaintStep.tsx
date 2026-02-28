@@ -45,7 +45,8 @@ export function ComplaintStep({
 
   if (isLoading || !complaintData) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center print:hidden">
+      <div className="flex flex-col items-center justify-center py-20 text-center print:hidden relative w-full h-[500px]">
+        <AgentActivityMonitor isComplete={false} />
         <div className="w-16 h-16 border-4 border-navy border-t-gold rounded-full animate-spin mb-6 mx-auto"></div>
         <h2 className="text-xl font-bold text-navy animate-pulse">
           📝 진정서 작성 중...
@@ -84,6 +85,7 @@ ${complaintData.details}
 
   return (
     <div className="w-full flex flex-col items-center relative">
+      {/* Show the AgentActivityMonitor unconditionally while in this step to ensure it remains open */}
       <AgentActivityMonitor isComplete={true} />
       <div
         ref={complaintRef}
