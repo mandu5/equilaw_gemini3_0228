@@ -208,6 +208,9 @@ export default function Home() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <ComplaintStep
               complaintData={complaintData}
+              wageData={wageData}
+              messages={messages}
+              violations={violations}
               onUpdate={updateComplaintField}
               isLoading={isGenerating}
               onNext={() => setCurrentStep(4)}

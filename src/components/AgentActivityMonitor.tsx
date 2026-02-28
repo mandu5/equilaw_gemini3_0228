@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-interface LogEntry {
+export interface LogEntry {
   timeMs: number;
   text: string;
   agentProcess: "Coordinator" | "Input" | "Legal" | "Action";
@@ -100,16 +100,25 @@ const COLORS = {
 
 interface AgentActivityMonitorProps {
   isComplete: boolean;
+  externalLogs?: LogEntry[];
 }
 
 export function AgentActivityMonitor({
   isComplete,
+  externalLogs,
 }: AgentActivityMonitorProps) {
   const [visibleLogs, setVisibleLogs] = useState<LogEntry[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // If using external logs, just render them directly
+    if (externalLogs) {
+      setVisibleLogs(externalLogs);
+      setIsThinking(false);
+      return;
+    }
+
     let timeouts: NodeJS.Timeout[] = [];
     const startTime = Date.now();
     let completedIndex = -1;
@@ -151,10 +160,12 @@ export function AgentActivityMonitor({
     processNextLog(0);
 
     return () => timeouts.forEach(clearTimeout);
-  }, [isComplete]);
+  }, [isComplete, externalLogs]);
 
   // Handle thinking placeholder when we hit the end but still "loading"
   useEffect(() => {
+    if (externalLogs) return; // Disable thinking state override for external logs
+
     let interval: NodeJS.Timeout;
     if (isThinking && !isComplete) {
       setVisibleLogs((prev) => {
