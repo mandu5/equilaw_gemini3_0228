@@ -225,6 +225,7 @@ export default function Home() {
               wageData={wageData}
               messages={messages}
               violations={violations}
+              complaintData={complaintData}
               onNext={() => setCurrentStep(5)}
             />
           </div>

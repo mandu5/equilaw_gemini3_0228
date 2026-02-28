@@ -1,15 +1,205 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Check, ShieldCheck, FileText, Send } from "lucide-react";
+import { Check, ShieldCheck, FileText, Send, Copy, MapPin } from "lucide-react";
 import { LogEntry } from "./AgentActivityMonitor";
+
+interface FormType {
+  formCode: string;
+  formTitle: string;
+  formTitleShort: string;
+  portalUrl: string;
+}
+
+function detectFormType(violations: any[]): FormType {
+  const allText = violations
+    .map((v) => `${v.name || ""} ${v.lawArticle || ""} ${v.description || ""}`)
+    .join(" ");
+
+  if (/성희롱|sexual harassment/.test(allText)) {
+    return {
+      formCode: "SN003",
+      formTitle: "직장 내 성희롱 신고서",
+      formTitleShort: "성희롱 신고",
+      portalUrl:
+        "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
+    };
+  }
+  if (/출산|육아|모성|maternity/.test(allText)) {
+    return {
+      formCode: "SN002",
+      formTitle: "출산휴가·육아휴직 진정신고서",
+      formTitleShort: "모성보호 진정",
+      portalUrl:
+        "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
+    };
+  }
+  if (/청원|산업재해|안전|사망|사고/.test(allText)) {
+    return {
+      formCode: "SN004",
+      formTitle: "근로감독 청원서",
+      formTitleShort: "근로감독 청원",
+      portalUrl:
+        "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
+    };
+  }
+  return {
+    formCode: "SN001",
+    formTitle: "진정서 (임금체불·직장내 괴롭힘·기타 노동법 위반)",
+    formTitleShort: "임금체불 진정",
+    portalUrl:
+      "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
+  };
+}
+
+interface JurisdictionOffice {
+  name: string;
+  address: string;
+  tel: string;
+}
+
+const JURISDICTION_MAP: Record<string, JurisdictionOffice> = {
+  중구: {
+    name: "서울지방고용노동청",
+    address: "서울 중구 삼일대로 363",
+    tel: "02-2250-5700",
+  },
+  종로: {
+    name: "서울지방고용노동청",
+    address: "서울 중구 삼일대로 363",
+    tel: "02-2250-5700",
+  },
+  용산: {
+    name: "서울지방고용노동청",
+    address: "서울 중구 삼일대로 363",
+    tel: "02-2250-5700",
+  },
+  강남: {
+    name: "서울강남지청",
+    address: "서울 강남구 논현로 406",
+    tel: "02-3468-4800",
+  },
+  서초: {
+    name: "서울강남지청",
+    address: "서울 강남구 논현로 406",
+    tel: "02-3468-4800",
+  },
+  송파: {
+    name: "서울강남지청",
+    address: "서울 강남구 논현로 406",
+    tel: "02-3468-4800",
+  },
+  강동: {
+    name: "서울강남지청",
+    address: "서울 강남구 논현로 406",
+    tel: "02-3468-4800",
+  },
+  영등포: {
+    name: "서울남부지청",
+    address: "서울 영등포구 버드나루로 지하 63",
+    tel: "02-2639-2200",
+  },
+  구로: {
+    name: "서울남부지청",
+    address: "서울 영등포구 버드나루로 지하 63",
+    tel: "02-2639-2200",
+  },
+  금천: {
+    name: "서울남부지청",
+    address: "서울 영등포구 버드나루로 지하 63",
+    tel: "02-2639-2200",
+  },
+  양천: {
+    name: "서울남부지청",
+    address: "서울 영등포구 버드나루로 지하 63",
+    tel: "02-2639-2200",
+  },
+  마포: {
+    name: "서울서부지청",
+    address: "서울 마포구 만리재로 15",
+    tel: "02-2077-6000",
+  },
+  서대문: {
+    name: "서울서부지청",
+    address: "서울 마포구 만리재로 15",
+    tel: "02-2077-6000",
+  },
+  은평: {
+    name: "서울서부지청",
+    address: "서울 마포구 만리재로 15",
+    tel: "02-2077-6000",
+  },
+  성동: {
+    name: "서울동부지청",
+    address: "서울 성동구 아차산로 113",
+    tel: "02-2142-8800",
+  },
+  광진: {
+    name: "서울동부지청",
+    address: "서울 성동구 아차산로 113",
+    tel: "02-2142-8800",
+  },
+  동대문: {
+    name: "서울동부지청",
+    address: "서울 성동구 아차산로 113",
+    tel: "02-2142-8800",
+  },
+  중랑: {
+    name: "서울동부지청",
+    address: "서울 성동구 아차산로 113",
+    tel: "02-2142-8800",
+  },
+  강북: {
+    name: "서울북부지청",
+    address: "서울 강북구 도봉로 260",
+    tel: "02-2171-6700",
+  },
+  도봉: {
+    name: "서울북부지청",
+    address: "서울 강북구 도봉로 260",
+    tel: "02-2171-6700",
+  },
+  노원: {
+    name: "서울북부지청",
+    address: "서울 강북구 도봉로 260",
+    tel: "02-2171-6700",
+  },
+  성북: {
+    name: "서울북부지청",
+    address: "서울 강북구 도봉로 260",
+    tel: "02-2171-6700",
+  },
+  관악: {
+    name: "서울관악지청",
+    address: "서울 관악구 관악로 152",
+    tel: "02-3282-9200",
+  },
+  동작: {
+    name: "서울관악지청",
+    address: "서울 관악구 관악로 152",
+    tel: "02-3282-9200",
+  },
+};
+
+function detectJurisdiction(companyAddress: string): JurisdictionOffice {
+  for (const [district, office] of Object.entries(JURISDICTION_MAP)) {
+    if (companyAddress.includes(district)) return office;
+  }
+  return {
+    name: "서울지방고용노동청",
+    address: "서울 중구 삼일대로 363",
+    tel: "02-2250-5700",
+  };
+}
 
 interface AutoFilingSimulationProps {
   wageData: any;
   messages: any[];
   violations: any[];
+  complaintData?: any;
   onLogsUpdate: (logs: LogEntry[]) => void;
   onComplete: () => void;
+  onNext?: () => void;
 }
 
 interface FieldStatus {
@@ -25,17 +215,143 @@ export function AutoFilingSimulation({
   wageData,
   messages,
   violations,
+  complaintData,
   onLogsUpdate,
   onComplete,
+  onNext,
 }: AutoFilingSimulationProps) {
   const [hasStarted, setHasStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Phase 6 Real Portal States
+  const [showGuide, setShowGuide] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   // Extract representative data from evidence (simple heuristics for demo)
-  const complainantName = "박현우"; // Employee name from the prompt example
-  const respondentName = "한솔제조"; // Company name from prompt example
+  const complainantName = complaintData?.complainantName || "박현우";
+  const respondentName = complaintData?.companyName || "한솔제조";
+  const companyAddress =
+    complaintData?.companyAddress || "경기도 성남시 분당구 판교역로 456";
+
+  const formType = detectFormType(violations);
+  const jurisdiction = detectJurisdiction(companyAddress);
+
+  const initLogsFired = useRef(false);
+  useEffect(() => {
+    if (initLogsFired.current) return;
+    initLogsFired.current = true;
+
+    const currentLogTime = Date.now();
+    const initLogs: LogEntry[] = [
+      {
+        timeMs: currentLogTime,
+        agentProcess: "Action",
+        text: `[0.0s] 🔍 Action Agent: Extracting workplace address from evidence...`,
+      },
+      {
+        timeMs: currentLogTime + 100,
+        agentProcess: "Action",
+        text: `[0.1s] 📍 Action Agent: 사업장 소재지: ${companyAddress}`,
+      },
+      {
+        timeMs: currentLogTime + 200,
+        agentProcess: "Action",
+        text: `[0.2s] 📍 Action Agent: Jurisdiction lookup: ${jurisdiction.name}`,
+      },
+      {
+        timeMs: currentLogTime + 300,
+        agentProcess: "Action",
+        text: `[0.3s] ✅ Action Agent: Jurisdiction confirmed — ${jurisdiction.name} (${jurisdiction.tel})`,
+      },
+      {
+        timeMs: currentLogTime + 400,
+        agentProcess: "Action",
+        text: `[0.4s] 📋 Action Agent: Analyzing violation types for form classification...`,
+      },
+      {
+        timeMs: currentLogTime + 500,
+        agentProcess: "Action",
+        text: `[0.5s] 📋 Action Agent: Detected form type: ${formType.formTitle} (${formType.formCode})`,
+      },
+    ];
+    setLogs(initLogs);
+    onLogsUpdate(initLogs);
+  }, [
+    companyAddress,
+    jurisdiction.name,
+    jurisdiction.tel,
+    formType.formTitle,
+    formType.formCode,
+    onLogsUpdate,
+  ]);
+
+  const toggleStep = (step: number) => {
+    const newSteps = completedSteps.includes(step)
+      ? completedSteps.filter((s) => s !== step)
+      : [...completedSteps, step];
+    setCompletedSteps(newSteps);
+
+    if (newSteps.length === 4) {
+      onLogsUpdate([
+        {
+          timeMs: Date.now(),
+          agentProcess: "Coordinator",
+          text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 🎉 Coordinator Agent: Real filing completed via 노동포털!`,
+        },
+        {
+          timeMs: Date.now() + 100,
+          agentProcess: "Coordinator",
+          text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 🎉 Coordinator Agent: Mission complete — Evidence → Analysis → Filing`,
+        },
+      ]);
+    }
+  };
+
+  const copyToClipboard = async (text: string, fieldName?: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (fieldName) {
+        setCopiedField(fieldName);
+        setTimeout(() => setCopiedField(null), 1500);
+      } else {
+        setToastMessage("✅ 전체 데이터가 클립보드에 복사되었습니다!");
+        setTimeout(() => setToastMessage(null), 2500);
+      }
+    } catch (err) {
+      alert("클립보드 복사에 실패했습니다. 권한을 확인해주세요.");
+    }
+  };
+
+  const handleFullCopyAndOpenPortal = () => {
+    const fullText = `═══ EquiLaw 자동 생성 진정서 ═══\n서식: ${formType.formTitle} (${formType.formCode})\n관할관서: ${jurisdiction.name}\n생성일시: ${new Date().toLocaleString()}\n\n[진정인 정보]\n성명: ${complainantName}\n연락처: 010-1234-5678\n주소: 서울특별시 강남구 테헤란로 123\n\n[피진정인 정보]\n상호/사업장명: ${respondentName}\n대표자명: 김부장\n사업장 주소: ${companyAddress}\n전화번호: 031-987-6543\n\n[진정내용]\n체불임금 총액: \₩${wageData?.calculatedAmount ? wageData.calculatedAmount.toLocaleString() : "861,244"}\n체불 기간: ${wageData?.periodStart && wageData?.periodEnd ? `${wageData.periodStart} ~ ${wageData.periodEnd}` : "2024.11.01 ~ 2024.12.31"}\n\n[진정 사유]\n${reasonText}\n\n═══════════════════════════════\n이 데이터는 EquiLaw AI가 자동 생성하였습니다.\n노동포털(labor.moel.go.kr)에서 해당 서식에 붙여넣기 하세요.`;
+
+    copyToClipboard(fullText);
+
+    onLogsUpdate([
+      {
+        timeMs: Date.now(),
+        agentProcess: "Action",
+        text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 📋 Action Agent: Filing data copied to clipboard ✓`,
+      },
+      {
+        timeMs: Date.now() + 100,
+        agentProcess: "Action",
+        text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 🌐 Action Agent: Opening 고용노동부 노동포털...`,
+      },
+      {
+        timeMs: Date.now() + 200,
+        agentProcess: "Action",
+        text: `[${((Date.now() - logs[0]?.timeMs || 0) / 1000).toFixed(1)}s] 📋 Action Agent: Step-by-step filing guide displayed`,
+      },
+    ]);
+
+    window.open(formType.portalUrl, "_blank");
+    setShowGuide(true);
+  };
 
   // Format the violation summary for the "Reason" field
   const violationSummary = violations
@@ -236,8 +552,22 @@ export function AutoFilingSimulation({
       id={`field-${field.id}`}
       className={`flex border-b border-gray-200 transition-colors duration-300 ${field.isActive ? "bg-blue-50/50" : "bg-white"}`}
     >
-      <div className="w-1/3 md:w-1/4 bg-[#F5F5F5] p-3 md:p-4 text-sm font-medium text-gray-700 border-r border-gray-200 flex items-center">
-        {field.label}
+      <div className="w-1/3 md:w-1/4 bg-[#F5F5F5] p-3 md:p-4 text-sm font-medium text-gray-700 border-r border-gray-200 flex items-center justify-between">
+        <span>{field.label}</span>
+        {isFinished && (
+          <button
+            onClick={() => copyToClipboard(field.value, field.id)}
+            className="text-gray-400 hover:text-blue-500 transition-colors relative flex shrink-0 ml-2"
+            title="복사하기"
+          >
+            <Copy className="w-4 h-4" />
+            {copiedField === field.id && (
+              <span className="absolute -top-6 -right-5 text-xs text-green-500 font-bold break-keep w-max bg-white px-1 py-0.5 rounded shadow-sm border border-green-100 z-10">
+                복사됨!
+              </span>
+            )}
+          </button>
+        )}
       </div>
       <div className="w-2/3 md:w-3/4 p-3 md:p-4 relative flex items-center">
         {field.id === "d_reason" ? (
@@ -281,6 +611,14 @@ export function AutoFilingSimulation({
 
   return (
     <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
+      {/* Global Toast Message */}
+      {toastMessage && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-green-800 text-white px-6 py-3 rounded-full shadow-2xl font-bold flex items-center gap-2 animate-[fadeIn_0.2s_ease-out]">
+          <Check className="w-5 h-5" />
+          {toastMessage}
+        </div>
+      )}
+
       <div className="w-full max-w-[900px]">
         {/* Start Button Overlay */}
         {!hasStarted && (
@@ -320,7 +658,7 @@ export function AutoFilingSimulation({
             {/* Address Bar */}
             <div className="flex-1 bg-white border border-gray-300 rounded-md px-3 py-1.5 text-xs text-gray-500 flex items-center shadow-sm">
               <span className="text-gray-400 mr-2">🔒</span>
-              https://minwon.moel.go.kr/minwon2008/lc_minwon/lc_form_apply.do
+              {formType.portalUrl}
             </div>
           </div>
 
@@ -340,15 +678,58 @@ export function AutoFilingSimulation({
           {/* Breadcrumb */}
           <div className="bg-gray-100 px-6 py-2 text-xs text-gray-500 border-b border-gray-200 flex items-center gap-2">
             <span>홈</span> &gt; <span>민원신청</span> &gt;{" "}
-            <span className="font-semibold text-gray-700">임금체불 진정서</span>
+            <span className="font-semibold text-gray-700">
+              {formType.formTitleShort}
+            </span>
           </div>
 
           {/* Form Content */}
           <div className="p-6 md:p-10" ref={containerRef}>
+            {/* Form Classification Badge */}
+            <div className="flex flex-col items-center mb-6">
+              <div className="bg-[#1E40AF] text-white px-6 py-2 rounded-full flex items-center gap-2 shadow-sm">
+                <span className="text-xl">🤖</span>
+                <span className="font-bold">
+                  AI 자동 판별 서식: {formType.formTitle}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">
+                서식코드: {formType.formCode} | 고용노동부 노동포털 진정·청원
+                분류
+              </p>
+            </div>
+
+            {/* Jurisdiction Info Card */}
+            <div className="bg-white border border-gray-200 border-l-4 border-l-blue-600 rounded-lg p-5 mb-8 shadow-sm">
+              <h4 className="font-bold border-b border-gray-100 pb-2 mb-3 flex items-center gap-2 text-gray-800">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                관할관서 자동 판별 결과
+              </h4>
+              <div className="grid grid-cols-[100px_1fr] gap-y-2 text-sm text-gray-600">
+                <div className="font-semibold text-gray-500">사업장 주소:</div>
+                <div>{companyAddress}</div>
+                <div className="font-semibold text-gray-500">관할 관서:</div>
+                <div className="font-bold text-gray-800">
+                  {jurisdiction.name}
+                </div>
+                <div className="font-semibold text-gray-500">관서 주소:</div>
+                <div>{jurisdiction.address}</div>
+                <div className="font-semibold text-gray-500">대표전화:</div>
+                <div>{jurisdiction.tel}</div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-green-600 font-semibold flex items-center gap-1">
+                <Check className="w-4 h-4" /> 관할관서 확인 완료
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                진정서는 사업장 소재지 관할 고용노동관서에 접수해야 합니다
+                (근로감독관집무규정 제37조)
+              </p>
+            </div>
+
             <div className="border-b-2 border-gray-800 pb-4 mb-8 flex items-center gap-3">
               <FileText className="w-8 h-8 text-gray-700" />
               <h2 className="text-3xl font-serif font-bold text-gray-800 tracking-tight">
-                임금체불 진정서 작성
+                {formType.formTitleShort} 작성
               </h2>
             </div>
 
@@ -416,29 +797,136 @@ export function AutoFilingSimulation({
               </div>
             </div>
 
-            {/* Completion Banner */}
+            {/* Real Portal Integration Flow */}
             {isFinished && (
-              <div className="mt-8 bg-green-50 border border-green-200 rounded-lg p-6 flex flex-col items-center justify-center text-center animate-[fadeIn_0.5s_ease-out_forwards]">
-                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-3">
-                  <Check className="w-6 h-6" />
+              <div className="mt-12 animate-[fadeIn_0.5s_ease-out_forwards]">
+                {/* Section A: Filing Status Card */}
+                <div className="bg-white border border-gray-200 border-l-4 border-l-green-600 rounded-lg p-6 shadow-md mb-6 relative overflow-hidden">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex shrink-0 items-center justify-center">
+                      <Check className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-gray-800 mb-1">
+                        📨 실제 진정서 접수
+                      </h4>
+                      <p className="text-gray-600">
+                        AI가 자동 작성한 진정서를 고용노동부 노동포털에서 실제로
+                        접수할 수 있습니다.
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <h4 className="text-xl font-bold text-green-800 mb-2">
-                  ✅ 모든 필드 자동 입력 완료
-                </h4>
-                <p className="text-green-600 mb-6">
-                  총 10개 항목 및 첨부파일이 지정된 양식에 맞게 입력되었습니다.
-                </p>
 
-                <div className="flex gap-4">
+                {/* Section B: Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-8">
                   <button
                     onClick={() => {
-                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      const fullText = `═══ EquiLaw 자동 생성 진정서 ═══\n서식: ${formType.formTitle} (${formType.formCode})\n관할관서: ${jurisdiction.name}\n생성일시: ${new Date().toLocaleString()}\n\n[진정인 정보]\n성명: ${complainantName}\n연락처: 010-1234-5678\n주소: 서울특별시 강남구 테헤란로 123\n\n[피진정인 정보]\n상호/사업장명: ${respondentName}\n대표자명: 김부장\n사업장 주소: ${companyAddress}\n전화번호: 031-987-6543\n\n[진정내용]\n체불임금 총액: \₩${wageData?.calculatedAmount ? wageData.calculatedAmount.toLocaleString() : "861,244"}\n체불 기간: ${wageData?.periodStart && wageData?.periodEnd ? `${wageData.periodStart} ~ ${wageData.periodEnd}` : "2024.11.01 ~ 2024.12.31"}\n\n[진정 사유]\n${reasonText}\n\n═══════════════════════════════\n이 데이터는 EquiLaw AI가 자동 생성하였습니다.\n노동포털(labor.moel.go.kr)에서 해당 서식에 붙여넣기 하세요.`;
+                      copyToClipboard(fullText);
                     }}
-                    className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded hover:bg-gray-50 transition-colors"
+                    className="flex-1 py-3 px-4 bg-white border border-gray-300 rounded-lg text-gray-700 font-bold hover:bg-gray-50 transition-colors flex justify-center items-center gap-2"
                   >
-                    👁️ 내용 검토하기
+                    <Copy className="w-5 h-5" /> 📋 전체 데이터 복사
+                  </button>
+                  <button
+                    onClick={handleFullCopyAndOpenPortal}
+                    className="flex-1 py-3 px-4 bg-blue-600 rounded-lg text-white font-bold hover:bg-blue-700 transition-colors flex justify-center items-center gap-2 shadow-md"
+                  >
+                    <Send className="w-5 h-5" /> 🌐 노동포털에서 실제 접수하기
                   </button>
                 </div>
+
+                {/* Section D: Step-by-Step Guide */}
+                {showGuide && (
+                  <div className="bg-[#F8FAFC] border border-blue-100 rounded-xl p-6 shadow-sm animate-[fadeIn_0.3s_ease-out]">
+                    <h3 className="text-lg font-bold text-[#1E3A8A] mb-4 flex items-center gap-2">
+                      📋 노동포털 접수 가이드
+                    </h3>
+                    <div className="space-y-3">
+                      {[
+                        {
+                          num: 1,
+                          title: "로그인",
+                          desc: "새로 열린 노동포털 창에서 간편인증 또는 공동인증서로 로그인하세요.",
+                        },
+                        {
+                          num: 2,
+                          title: "서식 선택",
+                          desc: `민원신청 → 진정·청원 → '${formType.formTitleShort}' 을 클릭하세요.`,
+                        },
+                        {
+                          num: 3,
+                          title: "내용 입력",
+                          desc: "복사된 전체 데이터를 각 필드에 나누어 붙여넣기 하시거나, 위 양식의 개별 항목 옆 📋 버튼을 통해 각각 복사하여 붙여넣으세요.",
+                        },
+                        {
+                          num: 4,
+                          title: "증거 첨부 및 제출",
+                          desc: "다운로드한 증거 파일을 첨부하고 제출 버튼을 클릭합니다.",
+                        },
+                      ].map((step) => {
+                        const isChecked = completedSteps.includes(step.num);
+                        return (
+                          <div
+                            key={step.num}
+                            onClick={() => toggleStep(step.num)}
+                            className={`flex gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isChecked ? "bg-white border-green-200 text-gray-400" : "bg-white border-gray-200 hover:border-blue-300"}`}
+                          >
+                            <div className="pt-0.5">
+                              <div
+                                className={`w-5 h-5 rounded flex items-center justify-center border ${isChecked ? "bg-green-500 border-green-500 text-white" : "border-gray-300"}`}
+                              >
+                                {isChecked && <Check className="w-3.5 h-3.5" />}
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <div
+                                className={`font-bold flex items-center gap-1.5 ${isChecked ? "line-through text-gray-400" : "text-gray-800"}`}
+                              >
+                                <span
+                                  className={`flex items-center justify-center w-5 h-5 rounded-full text-xs text-white ${isChecked ? "bg-gray-300" : "bg-blue-600"}`}
+                                >
+                                  {step.num}
+                                </span>
+                                {step.num}단계: {step.title}
+                              </div>
+                              <div
+                                className={`text-sm mt-1 ${isChecked ? "text-gray-400" : "text-gray-600"}`}
+                              >
+                                {step.desc}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {completedSteps.length === 4 && (
+                      <div className="mt-6 bg-green-50 border border-green-500 rounded-lg p-5 text-center flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
+                        <h4 className="text-xl font-bold text-green-700 mb-2">
+                          🎉 축하합니다! 진정서 접수가 완료되었습니다.
+                        </h4>
+                        <p className="text-green-800 text-sm mb-1">
+                          접수 후 1-2주 이내 담당 근로감독관이 배정됩니다.
+                        </p>
+                        <p className="text-green-600 text-xs mb-6">
+                          처리기한: 접수일로부터 25일 이내 (근로감독관집무규정
+                          제42조)
+                        </p>
+
+                        {onNext && (
+                          <button
+                            onClick={onNext}
+                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-transform hover:scale-105"
+                          >
+                            다음 단계로 이동 →
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

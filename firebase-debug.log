@@ -1,0 +1,42 @@
+[debug] [2026-02-28T06:24:54.528Z] ----------------------------------------------------------------------
+[debug] [2026-02-28T06:24:54.530Z] Command:       /Users/gosmain/.nvm/versions/node/v22.19.0/bin/node /Users/gosmain/.npm/_npx/7750544ccf494d8b/node_modules/.bin/firebase login:ci --no-localhost
+[debug] [2026-02-28T06:24:54.531Z] CLI Version:   15.8.0
+[debug] [2026-02-28T06:24:54.531Z] Platform:      darwin
+[debug] [2026-02-28T06:24:54.531Z] Node Version:  v22.19.0
+[debug] [2026-02-28T06:24:54.531Z] Time:          Sat Feb 28 2026 15:24:54 GMT+0900 (Korean Standard Time)
+[debug] [2026-02-28T06:24:54.531Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-02-28T06:24:54.532Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[warn] ⚠  Authenticating with a `login:ci` token is deprecated and will be removed in a future major version of `firebase-tools`. Instead, use a service account key with `GOOGLE_APPLICATION_CREDENTIALS`: https://cloud.google.com/docs/authentication/getting-started 
+[debug] [2026-02-28T06:24:54.567Z] >>> [apiv2][query] POST https://auth.firebase.tools/attest [none]
+[debug] [2026-02-28T06:24:54.568Z] >>> [apiv2][body] POST https://auth.firebase.tools/attest {"session_id":"a5a4cd5d-07ff-466a-9513-3f62c0dcafdb"}
+[debug] [2026-02-28T06:24:55.365Z] <<< [apiv2][status] POST https://auth.firebase.tools/attest 200
+[debug] [2026-02-28T06:24:55.365Z] <<< [apiv2][body] POST https://auth.firebase.tools/attest {"token":"HcHalvXBsMbSgDCrpm0EbY7cTXxR_bOaCvS-pNxgvOU"}
+[info] 
+[info] To sign in to the Firebase CLI:
+[info] 
+[info] 1. Take note of your session ID:
+[info] 
+[info]    A5A4C
+[info] 
+[info] 2. Visit the URL below on any device and follow the instructions to get your code:
+[info] 
+[info]    https://auth.firebase.tools/login?code_challenge=2hDOuwY7Qqk8LxT0o8B0yaMVk9oo_M0lUIxpW0VbkWw&session=a5a4cd5d-07ff-466a-9513-3f62c0dcafdb&attest=HcHalvXBsMbSgDCrpm0EbY7cTXxR_bOaCvS-pNxgvOU
+[info] 
+[info] 3. Paste or enter the authorization code below once you have it:
+[info] 
+[debug] [2026-02-28T06:24:56.111Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-02-28T06:24:56.111Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-02-28T06:25:58.311Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (/Users/gosmain/.npm/_npx/7750544ccf494d8b/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:101:37)
+    at Interface.emit (node:events:519:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1132:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:271:20)
+    at ReadStream.emit (node:events:531:35)
+    at emitKeys (node:internal/readline/utils:370:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:519:28)
+    at addChunk (node:internal/streams/readable:561:12)
+[error] 
+[error] Error: An unexpected error has occurred.

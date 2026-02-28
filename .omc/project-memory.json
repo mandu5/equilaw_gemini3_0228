@@ -130,6 +130,24 @@
       "type": "file"
     },
     {
+      "path": "src/components/ComplaintStep.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1772258808697,
+      "type": "file"
+    },
+    {
+      "path": "src/components/DashboardStep.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1772258809110,
+      "type": "file"
+    },
+    {
+      "path": "src/components/NextStepsStep.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1772258813257,
+      "type": "file"
+    },
+    {
       "path": "README.md",
       "accessCount": 1,
       "lastAccessed": 1772252820371,
@@ -166,33 +184,33 @@
       "type": "file"
     },
     {
-      "path": "src/components/DashboardStep.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1772252829467,
-      "type": "file"
-    },
-    {
       "path": "src/components/UploadStep.tsx",
       "accessCount": 1,
       "lastAccessed": 1772252833233,
       "type": "file"
     },
     {
-      "path": "src/components/ComplaintStep.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1772252833632,
-      "type": "file"
-    },
-    {
-      "path": "src/components/NextStepsStep.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1772252834017,
-      "type": "file"
-    },
-    {
       "path": "src/components/AutoFilingSimulation.tsx",
       "accessCount": 1,
       "lastAccessed": 1772257165301,
+      "type": "file"
+    },
+    {
+      "path": "src/components/AutoFilingStep.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772258809628,
+      "type": "file"
+    },
+    {
+      "path": "src/components/AgentActivityMonitor.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772258813743,
+      "type": "file"
+    },
+    {
+      "path": "src/components/RealComplaintSubmission.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772258813824,
       "type": "file"
     }
   ],

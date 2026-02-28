@@ -7,6 +7,7 @@ interface AutoFilingStepProps {
   wageData: any;
   messages: any[];
   violations: any[];
+  complaintData?: any;
   onNext: () => void;
 }
 
@@ -14,6 +15,7 @@ export function AutoFilingStep({
   wageData,
   messages,
   violations,
+  complaintData,
   onNext,
 }: AutoFilingStepProps) {
   const [autoFillLogs, setAutoFillLogs] = useState<LogEntry[]>([]);
@@ -24,7 +26,9 @@ export function AutoFilingStep({
   // Derive workplace address from messages if possible, else empty string
   const workplaceAddress = "서울특별시 영등포구 양평로 21길 26"; // Hardcoded for demo, normally extracted from analysis
   const complainantName =
-    messages?.find((m) => m.sender !== "김부장")?.sender || "박현우";
+    complaintData?.complainantName ||
+    messages?.find((m) => m.senderName !== "김부장")?.senderName ||
+    "박현우";
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -49,8 +53,10 @@ export function AutoFilingStep({
               wageData={wageData}
               messages={messages}
               violations={violations}
+              complaintData={complaintData}
               onLogsUpdate={setAutoFillLogs}
               onComplete={() => console.log("Auto fill simulation complete")}
+              onNext={onNext}
             />
           </div>
         </div>

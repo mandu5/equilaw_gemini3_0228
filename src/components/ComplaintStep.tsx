@@ -47,7 +47,7 @@ export function ComplaintStep({
       <div className="flex flex-col items-center justify-center py-20 text-center print:hidden">
         <div className="w-16 h-16 border-4 border-navy border-t-gold rounded-full animate-spin mb-6 mx-auto"></div>
         <h2 className="text-xl font-bold text-navy animate-pulse">
-          📝 임금체불 진정서 작성 중...
+          📝 진정서 작성 중...
         </h2>
         <p className="text-gray-500 mt-2">
           법률 양식에 맞게 문서를 작성하고 있습니다.

@@ -275,9 +275,23 @@ export function RealComplaintSubmission({
               </div>
 
               <div className="flex gap-4 mt-8 flex-wrap">
-                <button className="flex-1 min-w-[200px] bg-white text-green-700 border border-green-300 hover:bg-green-50 font-bold py-3 px-6 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2">
+                <button
+                  onClick={() => window.print()}
+                  className="flex-1 min-w-[200px] bg-white text-green-700 border border-green-300 hover:bg-green-50 font-bold py-3 px-6 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2"
+                >
                   <Printer className="w-5 h-5" />
                   접수 확인서 다운로드
+                </button>
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
+                      "_blank",
+                    )
+                  }
+                  className="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
+                >
+                  🌐 노동포털에서 공식 접수하기
                 </button>
                 <button
                   onClick={onNext}
