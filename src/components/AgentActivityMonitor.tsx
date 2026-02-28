@@ -110,7 +110,7 @@ export function AgentActivityMonitor({
 }: AgentActivityMonitorProps) {
   const [visibleLogs, setVisibleLogs] = useState<LogEntry[]>([]);
   const [isThinking, setIsThinking] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false); // Collapsed by default
+  const [isExpanded, setIsExpanded] = useState(true); // Always expanded initially
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Auto-expand when external logs come in (active simulation)

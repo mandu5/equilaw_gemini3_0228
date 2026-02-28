@@ -43,6 +43,7 @@ export default function Home() {
   } | null>(null);
 
   const handleFilesSelected = async (files: File[]) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setIsAnalyzing(true);
     setErrorMessage(null);
     setCurrentStep(2);
@@ -89,6 +90,7 @@ export default function Home() {
   };
 
   const generateComplaint = async () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setIsGenerating(true);
     setErrorMessage(null);
     setCurrentStep(3);
@@ -214,7 +216,10 @@ export default function Home() {
               violations={violations}
               onUpdate={updateComplaintField}
               isLoading={isGenerating}
-              onNext={() => setCurrentStep(4)}
+              onNext={() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setCurrentStep(4);
+              }}
             />
           </div>
         )}
@@ -226,7 +231,10 @@ export default function Home() {
               messages={messages}
               violations={violations}
               complaintData={complaintData}
-              onNext={() => setCurrentStep(5)}
+              onNext={() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setCurrentStep(5);
+              }}
             />
           </div>
         )}

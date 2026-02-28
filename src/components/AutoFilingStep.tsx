@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AgentActivityMonitor, LogEntry } from "./AgentActivityMonitor";
 import { AutoFilingSimulation } from "./AutoFilingSimulation";
 import { RealComplaintSubmission } from "./RealComplaintSubmission";
 
@@ -18,7 +17,7 @@ export function AutoFilingStep({
   complaintData,
   onNext,
 }: AutoFilingStepProps) {
-  const [autoFillLogs, setAutoFillLogs] = useState<LogEntry[]>([]);
+  const [autoFillLogs, setAutoFillLogs] = useState<any[]>([]);
   const isSimulationComplete =
     autoFillLogs.length > 0 &&
     autoFillLogs[autoFillLogs.length - 1].text.includes("🏁");
@@ -44,10 +43,6 @@ export function AutoFilingStep({
           </p>
         </div>
         <div className="w-full relative">
-          <AgentActivityMonitor
-            isComplete={isSimulationComplete}
-            externalLogs={autoFillLogs.length > 0 ? autoFillLogs : undefined}
-          />
           <div className="w-full max_w-[950px] mx-auto">
             <AutoFilingSimulation
               wageData={wageData}

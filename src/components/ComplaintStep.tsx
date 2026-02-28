@@ -1,5 +1,6 @@
 import { Copy, Download, FileSignature } from "lucide-react";
 import React, { useRef, useState, useEffect } from "react";
+import { AgentActivityMonitor } from "./AgentActivityMonitor";
 
 interface ComplaintStepProps {
   complaintData: {
@@ -74,43 +75,16 @@ ${complaintData.details}
 
   if (!complaintData) return null;
 
-  const handleDownload = async () => {
-    if (!complaintRef.current) return;
-
-    try {
-      setIsGeneratingPdf(true);
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const html2canvas = (await import("html2canvas")).default;
-      const { jsPDF } = await import("jspdf");
-
-      const canvas = await html2canvas(complaintRef.current, {
-        scale: 2, // higher resolution
-        useCORS: true,
-        logging: false,
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("진정서.pdf");
-    } catch (error) {
-      console.error("PDF 생성 실패:", error);
-      alert("PDF 생성 중 오류가 발생했습니다.");
-    } finally {
-      setIsGeneratingPdf(false);
-    }
+  const handleDownload = () => {
+    window.print();
   };
 
   const today = new Date();
   const dateStr = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center relative">
+      <AgentActivityMonitor isComplete={true} />
       <div
         ref={complaintRef}
         className="w-full max-w-[800px] bg-white text-black font-serif shadow-xl print:shadow-none print:max-w-none print:w-full mx-auto px-4 md:px-10 py-8 md:py-16 print:px-0 print:py-0 border border-gray-200 print:border-none"
@@ -332,12 +306,12 @@ ${complaintData.details}
         </button>
       </div>
 
-      <div className="flex justify-center mt-12 print:hidden">
+      <div className="flex justify-center mt-12 print:hidden mb-8">
         <button
           onClick={onNext}
-          className="text-navy font-semibold hover:underline"
+          className="flex items-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
         >
-          다음 단계로 이동하기 →
+          자동 접수 시뮬레이션으로 이동
         </button>
       </div>
     </div>

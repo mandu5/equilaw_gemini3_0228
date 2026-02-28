@@ -797,138 +797,18 @@ export function AutoFilingSimulation({
               </div>
             </div>
 
-            {/* Real Portal Integration Flow */}
-            {isFinished && (
-              <div className="mt-12 animate-[fadeIn_0.5s_ease-out_forwards]">
-                {/* Section A: Filing Status Card */}
-                <div className="bg-white border border-gray-200 border-l-4 border-l-green-600 rounded-lg p-6 shadow-md mb-6 relative overflow-hidden">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex shrink-0 items-center justify-center">
-                      <Check className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-gray-800 mb-1">
-                        📨 실제 진정서 접수
-                      </h4>
-                      <p className="text-gray-600">
-                        AI가 자동 작성한 진정서를 고용노동부 노동포털에서 실제로
-                        접수할 수 있습니다.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Section B: Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                  <button
-                    onClick={() => {
-                      const fullText = `═══ EquiLaw 자동 생성 진정서 ═══\n서식: ${formType.formTitle} (${formType.formCode})\n관할관서: ${jurisdiction.name}\n생성일시: ${new Date().toLocaleString()}\n\n[진정인 정보]\n성명: ${complainantName}\n연락처: 010-1234-5678\n주소: 서울특별시 강남구 테헤란로 123\n\n[피진정인 정보]\n상호/사업장명: ${respondentName}\n대표자명: 김부장\n사업장 주소: ${companyAddress}\n전화번호: 031-987-6543\n\n[진정내용]\n체불임금 총액: \₩${wageData?.calculatedAmount ? wageData.calculatedAmount.toLocaleString() : "861,244"}\n체불 기간: ${wageData?.periodStart && wageData?.periodEnd ? `${wageData.periodStart} ~ ${wageData.periodEnd}` : "2024.11.01 ~ 2024.12.31"}\n\n[진정 사유]\n${reasonText}\n\n═══════════════════════════════\n이 데이터는 EquiLaw AI가 자동 생성하였습니다.\n노동포털(labor.moel.go.kr)에서 해당 서식에 붙여넣기 하세요.`;
-                      copyToClipboard(fullText);
-                    }}
-                    className="flex-1 py-3 px-4 bg-white border border-gray-300 rounded-lg text-gray-700 font-bold hover:bg-gray-50 transition-colors flex justify-center items-center gap-2"
-                  >
-                    <Copy className="w-5 h-5" /> 📋 전체 데이터 복사
-                  </button>
-                  <button
-                    onClick={handleFullCopyAndOpenPortal}
-                    className="flex-1 py-3 px-4 bg-blue-600 rounded-lg text-white font-bold hover:bg-blue-700 transition-colors flex justify-center items-center gap-2 shadow-md"
-                  >
-                    <Send className="w-5 h-5" /> 🌐 노동포털에서 실제 접수하기
-                  </button>
-                </div>
-
-                {/* Section D: Step-by-Step Guide */}
-                {showGuide && (
-                  <div className="bg-[#F8FAFC] border border-blue-100 rounded-xl p-6 shadow-sm animate-[fadeIn_0.3s_ease-out]">
-                    <h3 className="text-lg font-bold text-[#1E3A8A] mb-4 flex items-center gap-2">
-                      📋 노동포털 접수 가이드
-                    </h3>
-                    <div className="space-y-3">
-                      {[
-                        {
-                          num: 1,
-                          title: "로그인",
-                          desc: "새로 열린 노동포털 창에서 간편인증 또는 공동인증서로 로그인하세요.",
-                        },
-                        {
-                          num: 2,
-                          title: "서식 선택",
-                          desc: `민원신청 → 진정·청원 → '${formType.formTitleShort}' 을 클릭하세요.`,
-                        },
-                        {
-                          num: 3,
-                          title: "내용 입력",
-                          desc: "복사된 전체 데이터를 각 필드에 나누어 붙여넣기 하시거나, 위 양식의 개별 항목 옆 📋 버튼을 통해 각각 복사하여 붙여넣으세요.",
-                        },
-                        {
-                          num: 4,
-                          title: "증거 첨부 및 제출",
-                          desc: "다운로드한 증거 파일을 첨부하고 제출 버튼을 클릭합니다.",
-                        },
-                      ].map((step) => {
-                        const isChecked = completedSteps.includes(step.num);
-                        return (
-                          <div
-                            key={step.num}
-                            onClick={() => toggleStep(step.num)}
-                            className={`flex gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isChecked ? "bg-white border-green-200 text-gray-400" : "bg-white border-gray-200 hover:border-blue-300"}`}
-                          >
-                            <div className="pt-0.5">
-                              <div
-                                className={`w-5 h-5 rounded flex items-center justify-center border ${isChecked ? "bg-green-500 border-green-500 text-white" : "border-gray-300"}`}
-                              >
-                                {isChecked && <Check className="w-3.5 h-3.5" />}
-                              </div>
-                            </div>
-                            <div className="flex-1">
-                              <div
-                                className={`font-bold flex items-center gap-1.5 ${isChecked ? "line-through text-gray-400" : "text-gray-800"}`}
-                              >
-                                <span
-                                  className={`flex items-center justify-center w-5 h-5 rounded-full text-xs text-white ${isChecked ? "bg-gray-300" : "bg-blue-600"}`}
-                                >
-                                  {step.num}
-                                </span>
-                                {step.num}단계: {step.title}
-                              </div>
-                              <div
-                                className={`text-sm mt-1 ${isChecked ? "text-gray-400" : "text-gray-600"}`}
-                              >
-                                {step.desc}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {completedSteps.length === 4 && (
-                      <div className="mt-6 bg-green-50 border border-green-500 rounded-lg p-5 text-center flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
-                        <h4 className="text-xl font-bold text-green-700 mb-2">
-                          🎉 축하합니다! 진정서 접수가 완료되었습니다.
-                        </h4>
-                        <p className="text-green-800 text-sm mb-1">
-                          접수 후 1-2주 이내 담당 근로감독관이 배정됩니다.
-                        </p>
-                        <p className="text-green-600 text-xs mb-6">
-                          처리기한: 접수일로부터 25일 이내 (근로감독관집무규정
-                          제42조)
-                        </p>
-
-                        {onNext && (
-                          <button
-                            onClick={onNext}
-                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-transform hover:scale-105"
-                          >
-                            다음 단계로 이동 →
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+        {/* Real Portal Integration Flow */}
+        {isFinished && (
+          <div className="mt-12 flex justify-center animate-[fadeIn_0.5s_ease-out_forwards]">
+            <button
+              onClick={onNext}
+              className="flex items-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
+            >
+              다음 단계로 이동 (실제 접수)
+              <Send className="w-6 h-6" />
+            </button>
+          </div>
+        )}
           </div>
         </div>
       </div>

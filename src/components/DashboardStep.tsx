@@ -237,17 +237,10 @@ export function DashboardStep({
                 법률 분석 완료
               </h3>
               <p className="text-sm text-gray-500">
-                아래 분석 결과를 확인하고 진정서 작성 단계로 이동하세요.
+                아래 분석 결과를 모두 확인한 후 가장 아래의 버튼을 눌러 진정서 작성 단계로 이동하세요.
               </p>
             </div>
           </div>
-          <button
-            onClick={onNext}
-            className="flex items-center gap-2 bg-navy hover:bg-navy/90 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-sm shrink-0"
-          >
-            진정서 작성 단계로 이동
-            <ArrowRight className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Audio Transcription Panel */}
@@ -578,6 +571,17 @@ export function DashboardStep({
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="flex justify-center mt-12 mb-8">
+          <button
+            onClick={onNext}
+            className="flex items-center gap-3 bg-navy hover:bg-navy/90 text-white px-10 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200"
+          >
+            진정서 작성 단계로 이동
+            <ArrowRight className="w-6 h-6" />
+          </button>
         </div>
       </div>
     </div>

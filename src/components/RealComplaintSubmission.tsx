@@ -99,9 +99,6 @@ export function RealComplaintSubmission({
 }: RealComplaintSubmissionProps) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
-  const [submissionChannel, setSubmissionChannel] = useState<
-    "email" | "fax" | "mail"
-  >("email");
   const [disclaimerChecked, setDisclaimerChecked] = useState(false);
 
   const [submissionStage, setSubmissionStage] = useState<
@@ -205,11 +202,11 @@ export function RealComplaintSubmission({
         {/* Header */}
         <div className="bg-blue-50/50 border-b border-gray-100 p-6 px-8">
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-            <Send className="w-6 h-6 text-[#2563EB]" />
-            📨 실제 진정서 접수
+            <Printer className="w-6 h-6 text-[#2563EB]" />
+            📠 관할관서 팩스 자동 발송
           </h2>
           <p className="text-gray-600 mt-2 font-medium">
-            AI가 관할 노동관서를 자동으로 판별하고, 진정서를 실제로 접수합니다.
+            AI가 작성한 진정서와 증거자료를 관할 노동관서에 인터넷 팩스로 즉시 발송합니다.
           </p>
         </div>
 
@@ -244,11 +241,7 @@ export function RealComplaintSubmission({
                 <div className="flex justify-between items-center py-2 border-b border-green-100/50">
                   <span className="text-gray-500 font-medium">접수방법</span>
                   <span className="font-bold text-gray-800">
-                    {submissionChannel === "email"
-                      ? "이메일 자동 접수"
-                      : submissionChannel === "fax"
-                        ? "인터넷팩스 자동 발송"
-                        : "출력 후 우편"}
+                    인터넷팩스 자동 발송
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 md:col-span-2">
@@ -281,17 +274,6 @@ export function RealComplaintSubmission({
                 >
                   <Printer className="w-5 h-5" />
                   접수 확인서 다운로드
-                </button>
-                <button
-                  onClick={() =>
-                    window.open(
-                      "https://labor.moel.go.kr/minwonApply/minwonApply.do?searchGubun=2",
-                      "_blank",
-                    )
-                  }
-                  className="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2"
-                >
-                  🌐 노동포털에서 공식 접수하기
                 </button>
                 <button
                   onClick={onNext}
@@ -482,91 +464,13 @@ export function RealComplaintSubmission({
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-sm font-bold text-gray-700 mb-3">
-                  접수 채널 선택
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <label
-                    className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center gap-2 transition-all ${submissionChannel === "email" ? "bg-blue-50 border-blue-500 ring-1 ring-blue-500" : "bg-white border-gray-200 hover:border-blue-300"}`}
-                  >
-                    <input
-                      type="radio"
-                      className="sr-only"
-                      checked={submissionChannel === "email"}
-                      onChange={() => setSubmissionChannel("email")}
-                      disabled={submissionStage !== "idle"}
-                    />
-                    <div className="bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full absolute -ml-24 -mt-5">
-                      RECOMMENDED
-                    </div>
-                    <Mail
-                      className={`w-6 h-6 ${submissionChannel === "email" ? "text-blue-600" : "text-gray-400"}`}
-                    />
-                    <span
-                      className={`text-sm font-bold ${submissionChannel === "email" ? "text-blue-700" : "text-gray-600"}`}
-                    >
-                      📧 이메일 접수
-                    </span>
-                    <span className="text-xs text-gray-500 text-center">
-                      관할관서 공식 메일로
-                      <br />
-                      즉시 발송 (가장 빠름)
-                    </span>
-                  </label>
-
-                  <label
-                    className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center gap-2 transition-all ${submissionChannel === "fax" ? "bg-blue-50 border-blue-500 ring-1 ring-blue-500" : "bg-white border-gray-200 hover:border-blue-300"}`}
-                  >
-                    <input
-                      type="radio"
-                      className="sr-only"
-                      checked={submissionChannel === "fax"}
-                      onChange={() => setSubmissionChannel("fax")}
-                      disabled={submissionStage !== "idle"}
-                    />
-                    <Printer
-                      className={`w-6 h-6 ${submissionChannel === "fax" ? "text-blue-600" : "text-gray-400"}`}
-                    />
-                    <span
-                      className={`text-sm font-bold ${submissionChannel === "fax" ? "text-blue-700" : "text-gray-600"}`}
-                    >
-                      📠 팩스 접수
-                    </span>
-                    <span className="text-xs text-gray-500 text-center">
-                      인터넷 팩스를 통해
-                      <br />
-                      자동 전송 처리
-                    </span>
-                  </label>
-
-                  <label
-                    className={`cursor-pointer border rounded-lg p-3 flex flex-col items-center gap-2 transition-all ${submissionChannel === "mail" ? "bg-blue-50 border-blue-500 ring-1 ring-blue-500" : "bg-white border-gray-200 hover:border-blue-300"}`}
-                  >
-                    <input
-                      type="radio"
-                      className="sr-only"
-                      checked={submissionChannel === "mail"}
-                      onChange={() => setSubmissionChannel("mail")}
-                      disabled={submissionStage !== "idle"}
-                    />
-                    <span
-                      className={`text-2xl pt-1 ${submissionChannel === "mail" ? "" : "grayscale"}`}
-                    >
-                      📮
-                    </span>
-                    <span
-                      className={`text-sm font-bold ${submissionChannel === "mail" ? "text-blue-700" : "text-gray-600"}`}
-                    >
-                      우편/방문 접수
-                    </span>
-                    <span className="text-xs text-gray-500 text-center">
-                      PDF로 서류를 출력하여
-                      <br />
-                      직접 우체국 접수/방문
-                    </span>
-                  </label>
-                </div>
+              <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-bold text-blue-800 flex items-center gap-2 mb-2">
+                  <Printer className="w-5 h-5" /> 팩스 자동 발송
+                </h4>
+                <p className="text-sm text-blue-700">
+                  위에서 생성된 진정서와 증거자료가 <strong>{jurisdiction.name} ({jurisdiction.fax})</strong>으로 암호화되어 즉시 팩스로 전송됩니다.
+                </p>
               </div>
 
               <label className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
@@ -598,8 +502,8 @@ export function RealComplaintSubmission({
                       : "bg-gray-200 text-gray-400 cursor-not-allowed"
                   }`}
                 >
-                  <Send className="w-5 h-5" />
-                  진정서 접수하기
+                  <Printer className="w-5 h-5" />
+                  팩스로 진정서 발송하기
                 </button>
               )}
 
