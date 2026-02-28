@@ -1,7 +1,5 @@
 import { Copy, Download, FileSignature } from "lucide-react";
-import React, { useRef, useEffect, useState } from "react";
-import { AgentActivityMonitor, LogEntry } from "./AgentActivityMonitor";
-import { AutoFilingSimulation } from "./AutoFilingSimulation";
+import React, { useRef, useState, useEffect } from "react";
 
 interface ComplaintStepProps {
   complaintData: {
@@ -35,7 +33,6 @@ export function ComplaintStep({
   const detailsRef = useRef<HTMLTextAreaElement>(null);
   const complaintRef = useRef<HTMLDivElement>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [autoFillLogs, setAutoFillLogs] = useState<LogEntry[]>([]);
 
   // Auto-resize the textarea based on content
   useEffect(() => {
@@ -342,37 +339,6 @@ ${complaintData.details}
         >
           다음 단계로 이동하기 →
         </button>
-      </div>
-
-      {/* Auto-Filing Simulation Section */}
-      <div className="w-full max-w-[1200px] mt-16 pb-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left: Agent Monitor (Sticky) */}
-          <div className="w-full lg:w-[350px] shrink-0">
-            <div className="sticky top-6 h-[500px]">
-              <AgentActivityMonitor
-                isComplete={
-                  autoFillLogs.length > 0 &&
-                  autoFillLogs[autoFillLogs.length - 1].text.includes("🏁")
-                }
-                externalLogs={
-                  autoFillLogs.length > 0 ? autoFillLogs : undefined
-                }
-              />
-            </div>
-          </div>
-
-          {/* Right: Simulation UI */}
-          <div className="flex-1">
-            <AutoFilingSimulation
-              wageData={wageData}
-              messages={messages}
-              violations={violations}
-              onLogsUpdate={setAutoFillLogs}
-              onComplete={() => console.log("Auto fill simulation complete")}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );

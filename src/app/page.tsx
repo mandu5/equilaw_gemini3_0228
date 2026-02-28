@@ -11,6 +11,7 @@ import {
   AudioAnalysis,
 } from "@/components/DashboardStep";
 import { ComplaintStep } from "@/components/ComplaintStep";
+import { AutoFilingStep } from "@/components/AutoFilingStep";
 import { NextStepsStep } from "@/components/NextStepsStep";
 import { XCircle } from "lucide-react";
 
@@ -219,6 +220,17 @@ export default function Home() {
         )}
 
         {currentStep === 4 && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <AutoFilingStep
+              wageData={wageData}
+              messages={messages}
+              violations={violations}
+              onNext={() => setCurrentStep(5)}
+            />
+          </div>
+        )}
+
+        {currentStep === 5 && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <NextStepsStep />
           </div>

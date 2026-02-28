@@ -3,7 +3,8 @@ export function Stepper({ currentStep }: { currentStep: number }) {
     { num: 1, label: "증거 업로드" },
     { num: 2, label: "AI 분석" },
     { num: 3, label: "진정서 작성" },
-    { num: 4, label: "다음 단계" },
+    { num: 4, label: "자동접수" },
+    { num: 5, label: "다음 단계" },
   ];
 
   return (

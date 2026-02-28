@@ -124,15 +124,15 @@
       "type": "directory"
     },
     {
-      "path": "README.md",
-      "accessCount": 1,
-      "lastAccessed": 1772252820371,
+      "path": "src/app/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1772257165624,
       "type": "file"
     },
     {
-      "path": "src/app/page.tsx",
+      "path": "README.md",
       "accessCount": 1,
-      "lastAccessed": 1772252821015,
+      "lastAccessed": 1772252820371,
       "type": "file"
     },
     {
@@ -187,6 +187,12 @@
       "path": "src/components/NextStepsStep.tsx",
       "accessCount": 1,
       "lastAccessed": 1772252834017,
+      "type": "file"
+    },
+    {
+      "path": "src/components/AutoFilingSimulation.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772257165301,
       "type": "file"
     }
   ],

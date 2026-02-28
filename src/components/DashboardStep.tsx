@@ -145,29 +145,22 @@ export function DashboardStep({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col md:flex-row gap-6 h-[600px]">
-        {/* Left: Spinner (70%) */}
-        <div className="flex-1 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm p-8">
-          <div className="relative w-24 h-24 mb-8">
-            <div className="absolute inset-0 border-4 border-navy/20 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-navy rounded-full border-t-transparent animate-spin"></div>
-            <Scale className="absolute inset-0 m-auto w-8 h-8 text-navy animate-pulse" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            AI 법률 분석 중...
-          </h2>
-          <p className="text-gray-500 max-w-md text-center">
-            {loadingStatus}
-            <br />
-            업로드된 자료와 근로기준법 판례를 대조하고 있습니다. 잠시만
-            기다려주세요 (최대 30초 소요).
-          </p>
+      <div className="flex flex-col items-center justify-center p-12 min-h-[500px] w-full bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="relative w-24 h-24 mb-8">
+          <div className="absolute inset-0 border-4 border-navy/20 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-navy rounded-full border-t-transparent animate-spin"></div>
+          <Scale className="absolute inset-0 m-auto w-8 h-8 text-navy animate-pulse" />
         </div>
-
-        {/* Right: Agent Activity Monitor (30%) */}
-        <div className="w-full md:w-[350px] lg:w-[400px] shrink-0 h-full">
-          <AgentActivityMonitor isComplete={false} />
-        </div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          AI 법률 분석 중...
+        </h2>
+        <p className="text-gray-500 max-w-md text-center mb-8">
+          {loadingStatus}
+          <br />
+          업로드된 자료와 근로기준법 판례를 대조하고 있습니다. 잠시만
+          기다려주세요 (최대 30초 소요).
+        </p>
+        <AgentActivityMonitor isComplete={false} />
       </div>
     );
   }
@@ -229,9 +222,10 @@ export function DashboardStep({
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
+    <div className="w-full relative">
+      <AgentActivityMonitor isComplete={true} />
       {/* Left: Main Dashboard Content */}
-      <div className="flex-1 space-y-6">
+      <div className="w-full space-y-6">
         {/* Progress Overview */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -584,14 +578,6 @@ export function DashboardStep({
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Right: Agent Activity Monitor Layout (Persistent after load) */}
-      <div className="w-full lg:w-[350px] xl:w-[400px] shrink-0 flex flex-col gap-6">
-        {/* The monitor itself, constrained to match the height of typically the first couple of cards or use a sticky behavior if desired */}
-        <div className="sticky top-6 h-[600px]">
-          <AgentActivityMonitor isComplete={true} />
         </div>
       </div>
     </div>

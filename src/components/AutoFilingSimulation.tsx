@@ -280,16 +280,12 @@ export function AutoFilingSimulation({
   );
 
   return (
-    <div className="w-full flex flex-col items-center mt-12 mb-20 animate-[fadeIn_0.5s_ease-out]">
+    <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
       <div className="w-full max-w-[900px]">
-        <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <span className="text-2xl">🖥️</span> 자동 접수 시뮬레이션
-        </h3>
-
         {/* Start Button Overlay */}
         {!hasStarted && (
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 text-center mb-8 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-50"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-blue-50 to-indigo-50 opacity-50"></div>
             <div className="relative z-10 flex flex-col items-center">
               <ShieldCheck className="w-16 h-16 text-navy mb-4" />
               <h4 className="text-2xl font-bold text-gray-800 mb-2">
@@ -309,10 +305,25 @@ export function AutoFilingSimulation({
           </div>
         )}
 
-        {/* Government Form Replica */}
+        {/* Browser Window Wrapper */}
         <div
-          className={`bg-white border-2 border-[#1A4B8C] shadow-2xl overflow-hidden transition-all duration-1000 ${hasStarted ? "opacity-100 translate-y-0" : "opacity-50 translate-y-4 pointer-events-none"}`}
+          className={`bg-white border border-gray-300 rounded-xl shadow-2xl overflow-hidden transition-all duration-1000 flex flex-col ${hasStarted ? "opacity-100 translate-y-0" : "opacity-60 translate-y-4 pointer-events-none"}`}
         >
+          {/* Browser Chrome / Header */}
+          <div className="bg-gray-100 border-b border-gray-300 px-4 py-3 flex items-center gap-4">
+            {/* Window Controls (macOS style) */}
+            <div className="flex gap-2 shrink-0">
+              <div className="w-3 h-3 rounded-full bg-red-400"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+              <div className="w-3 h-3 rounded-full bg-green-400"></div>
+            </div>
+            {/* Address Bar */}
+            <div className="flex-1 bg-white border border-gray-300 rounded-md px-3 py-1.5 text-xs text-gray-500 flex items-center shadow-sm">
+              <span className="text-gray-400 mr-2">🔒</span>
+              https://minwon.moel.go.kr/minwon2008/lc_minwon/lc_form_apply.do
+            </div>
+          </div>
+
           {/* Gov Header */}
           <div className="bg-[#1A4B8C] text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -347,7 +358,7 @@ export function AutoFilingSimulation({
                 <span className="w-1.5 h-4 bg-[#1A4B8C] inline-block"></span>{" "}
                 진정인 (Complainant)
               </h3>
-              <div className="border-t-2 border-[#1A4B8C]">
+              <div className="border-t-2 border-t-[#1A4B8C]">
                 {fields.slice(0, 3).map((f) => (
                   <FieldRow key={f.id} field={f} />
                 ))}
@@ -360,7 +371,7 @@ export function AutoFilingSimulation({
                 <span className="w-1.5 h-4 bg-[#1A4B8C] inline-block"></span>{" "}
                 피진정인 (Respondent)
               </h3>
-              <div className="border-t-2 border-[#1A4B8C]">
+              <div className="border-t-2 border-t-[#1A4B8C]">
                 {fields.slice(3, 7).map((f) => (
                   <FieldRow key={f.id} field={f} />
                 ))}
@@ -373,7 +384,7 @@ export function AutoFilingSimulation({
                 <span className="w-1.5 h-4 bg-[#1A4B8C] inline-block"></span>{" "}
                 진정내용
               </h3>
-              <div className="border-t-2 border-[#1A4B8C]">
+              <div className="border-t-2 border-t-[#1A4B8C]">
                 {fields.slice(7, 10).map((f) => (
                   <FieldRow key={f.id} field={f} />
                 ))}
@@ -386,7 +397,7 @@ export function AutoFilingSimulation({
                 <span className="w-1.5 h-4 bg-[#1A4B8C] inline-block"></span>{" "}
                 첨부서류
               </h3>
-              <div className="border-t-2 border-[#1A4B8C] flex border-b border-gray-200">
+              <div className="border-t-2 border-t-[#1A4B8C] flex border-b border-b-gray-200">
                 <div className="w-1/3 md:w-1/4 bg-[#F5F5F5] p-3 md:p-4 text-sm font-medium text-gray-700 border-r border-gray-200 flex items-center">
                   업로드된 증거 자료
                 </div>
@@ -426,9 +437,6 @@ export function AutoFilingSimulation({
                     className="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded hover:bg-gray-50 transition-colors"
                   >
                     👁️ 내용 검토하기
-                  </button>
-                  <button className="px-6 py-2.5 bg-[#1A4B8C] hover:bg-[#1A4B8C]/90 text-white font-bold rounded flex items-center gap-2 transition-colors shadow-md">
-                    <Send className="w-4 h-4" /> 접수하기 (최종 제출)
                   </button>
                 </div>
               </div>

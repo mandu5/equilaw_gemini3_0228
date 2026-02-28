@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { Maximize2, Minimize2, X } from "lucide-react";
 
 export interface LogEntry {
   timeMs: number;
@@ -109,7 +110,15 @@ export function AgentActivityMonitor({
 }: AgentActivityMonitorProps) {
   const [visibleLogs, setVisibleLogs] = useState<LogEntry[]>([]);
   const [isThinking, setIsThinking] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false); // Collapsed by default
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-expand when external logs come in (active simulation)
+  useEffect(() => {
+    if (externalLogs && externalLogs.length > 0) {
+      if (!isExpanded) setIsExpanded(true);
+    }
+  }, [externalLogs?.length]);
 
   useEffect(() => {
     // If using external logs, just render them directly
@@ -202,23 +211,48 @@ export function AgentActivityMonitor({
     }
   }, [visibleLogs]);
 
-  return (
-    <div className="flex flex-col h-full bg-[#0F1A2E] text-gray-300 font-mono text-xs sm:text-sm rounded-lg overflow-hidden border border-gray-700/50 shadow-2xl">
-      {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3 bg-[#17263F] border-b border-gray-700/50">
-        <div className="relative flex h-2 w-2">
+  if (!isExpanded) {
+    return (
+      <div
+        onClick={() => setIsExpanded(true)}
+        className="fixed bottom-6 right-6 z-50 bg-[#17263F] hover:bg-[#0F1A2E] text-gray-200 border border-gray-700/50 shadow-[0_8px_30px_rgb(0,0,0,0.4)] rounded-full px-5 py-3 flex items-center gap-3 cursor-pointer transition-all duration-300 hover:scale-[1.03] group animate-[fadeIn_0.5s_ease-out]"
+      >
+        <div className="relative flex h-2.5 w-2.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
         </div>
-        <span className="font-semibold text-gray-200">
-          🤖 Agent Activity Monitor
-        </span>
+        <span className="font-semibold text-sm mr-1">🤖 Agent Status</span>
+        <Maximize2 className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[420px] h-[450px] flex flex-col bg-[#0F1A2E] text-gray-300 font-mono text-xs sm:text-sm rounded-xl overflow-hidden border border-gray-700/50 shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[fadeIn_0.2s_ease-out]">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#17263F] border-b border-gray-700/50 cursor-default">
+        <div className="flex items-center gap-3">
+          <div className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+          </div>
+          <span className="font-bold text-gray-200 tracking-wide">
+            Agent Activity Monitor
+          </span>
+        </div>
+        <button
+          onClick={() => setIsExpanded(false)}
+          className="text-gray-400 hover:text-white p-1 rounded-md hover:bg-gray-700/50 transition-colors"
+          title="최소화"
+        >
+          <Minimize2 className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Log Terminal */}
       <div
         ref={containerRef}
-        className="flex-1 p-4 overflow-y-auto space-y-2 scroll-smooth custom-scrollbar"
+        className="flex-1 p-5 overflow-y-auto space-y-2.5 scroll-smooth custom-scrollbar"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "#4B5563 transparent",
@@ -226,14 +260,14 @@ export function AgentActivityMonitor({
       >
         {visibleLogs.map((log, i) => (
           <div
-            key={log.timeMs}
-            className={`opacity-0 animate-[fadeIn_0.2s_ease-out_forwards] ${COLORS[log.agentProcess]}`}
+            key={log.timeMs + i}
+            className={`opacity-0 animate-[fadeIn_0.2s_ease-out_forwards] ${COLORS[log.agentProcess]} leading-relaxed`}
           >
             {/* Timestamp pulsing */}
             <span className="text-gray-500 mr-2 opacity-0 animate-[pulseTimestamp_0.5s_ease-out_forwards]">
               {log.text.match(/^(\[\d+\.\ds\])/)?.[1] || ""}
             </span>
-            {/* Main log text typing effect (simulated via rapid fade in this context for better performance than character-by-character render) */}
+            {/* Main log text */}
             <span className="">{log.text.replace(/^\[\d+\.\ds\]\s/, "")}</span>
           </div>
         ))}
@@ -246,7 +280,7 @@ export function AgentActivityMonitor({
         @keyframes fadeIn {
           from {
             opacity: 0;
-            transform: translateY(4px);
+            transform: translateY(8px);
           }
           to {
             opacity: 1;
