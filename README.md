@@ -106,8 +106,8 @@ Open `http://localhost:3000` in your browser to see the application in action.
 
 ## 🤝 Contributors
 
-- **Development & Product Design** : Hyunwoo Park (Please update with your name)
-- **Contact** : your-email@example.com (Please update with your email)
+- **Development & Product Design** : Youngmin Ko
+- **Contact** : ymk5292@psu.edu
 
 ---
 
