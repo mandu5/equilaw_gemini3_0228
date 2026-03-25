@@ -1,13 +1,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <div align="center">
-  <h1>⚖️ EquiLaw</h1>
+  <h1>EquiLaw</h1>
   <p><strong>AI-Powered Labor Law Violation Analysis & One-Click Complaint Filing Service</strong></p>
   <p>Submission for the Gemini 3.0 API Hackathon</p>
 </div>
 
 ---
 
-## 🎬 Final Demo Video
+## Final Demo Video
 *(Click the video below to watch the demonstration)*
 
 https://github.com/user-attachments/assets/f25f8a44-db21-4af7-bd68-0976af482ef9
@@ -15,18 +15,18 @@ https://github.com/user-attachments/assets/f25f8a44-db21-4af7-bd68-0976af482ef9
 
 ---
 
-## 💡 About the Project
+## About the Project
 
 **EquiLaw** is an innovative solution designed to help workers who have experienced unfair treatment (e.g., unpaid wages, unfair dismissal, workplace harassment) navigate complex legal procedures easily and swiftly using AI.
 
 When a user uploads various forms of evidence—such as screenshots of KakaoTalk conversations, images of employment contracts, or voice recordings—EquiLaw leverages the **powerful multimodal analysis capabilities of the Google Gemini API** to identify violated labor laws and calculate unpaid wages. Furthermore, based on the analyzed data, it automatically generates a formal complaint tailored to the Ministry of Employment and Labor's format, and facilitates direct faxing to the competent jurisdiction or one-click simulation filing on the Labor Portal.
 
-### 🌟 Background
+### Background
 Ordinary workers lacking legal knowledge often spend immense amounts of time and money on extensive paperwork, searching for relevant laws, and organizing evidence just to claim their rights. EquiLaw was developed to bridge this information asymmetry and empower anyone to easily seek legal remedy.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### 1. Multimodal Evidence AI Analysis (Image & Audio)
 - Extracts text (OCR) from image files like chat screenshots and receipts.
@@ -51,7 +51,7 @@ Ordinary workers lacking legal knowledge often spend immense amounts of time and
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework:** Next.js 15 (App Router), React 19
@@ -68,7 +68,7 @@ Ordinary workers lacking legal knowledge often spend immense amounts of time and
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the Repository
 ```bash
@@ -95,7 +95,7 @@ Open `http://localhost:3000` in your browser to see the application in action.
 
 ---
 
-## 📝 Application Flow & Screenshots
+## Application Flow & Screenshots
 
 1. **Main & File Upload** - Upload multimodal data like chat screenshots and audio recordings.
 2. **AI Analysis Dashboard** - Detect legal violations and use the unpaid wage calculator.
@@ -105,7 +105,7 @@ Open `http://localhost:3000` in your browser to see the application in action.
 
 ---
 
-## 🤝 Contributors
+## Contributors
 
 - **Development & Product Design** : Youngmin Ko
 - **Contact** : ymk5292@psu.edu
